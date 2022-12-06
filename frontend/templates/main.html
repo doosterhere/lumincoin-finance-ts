@@ -1,0 +1,60 @@
+<div class="p-5">
+    <h1 class="mt-5 mb-5" id="title">Главная</h1>
+    <div class="filter-buttons d-flex align-items-center mb-5 pb-5">
+        <button class="btn btn-secondary" id="period-today-button" data-period="today">Сегодня</button>
+        <button class="btn btn-outline-secondary" id="period-week-button" data-period="week">Неделя</button>
+        <button class="btn btn-outline-secondary" id="period-month-button" data-period="month">Месяц</button>
+        <button class="btn btn-outline-secondary" id="period-year-button" data-period="year">Год</button>
+        <button class="btn btn-outline-secondary" id="period-all-button" data-period="all">Все</button>
+        <button class="btn btn-outline-secondary" id="period-interval-button" data-bs-toggle="modal"
+                data-bs-target="#select-interval-window">Интервал
+        </button>
+        <span>с</span>
+        <span class="text-decoration-underline text-secondary" id="date-from">
+            <!--    insert dateFrom here    -->
+        </span>
+        <span>по</span>
+        <span class="text-decoration-underline text-secondary" id="date-to">
+            <!--    insert dateTo here  -->
+        </span>
+    </div>
+    <div class="row w-auto">
+        <div class="col">
+            <h3 class="text-center mb-3">Доходы</h3>
+            <canvas id="chart-incomes" width="450" height="450"
+                    class="border-end border-1 border-secondary border-opacity-25"></canvas>
+        </div>
+        <div class="col">
+            <h3 class="text-center mb-3">Расходы</h3>
+            <canvas id="chart-expenses" width="450" height="450"></canvas>
+        </div>
+    </div>
+    <!--    modal window 'datepicker'-->
+    <div class="modal fade" id="select-interval-window" data-bs-backdrop="static" data-bs-keyboard="false"
+         tabindex="-1" aria-labelledby="modal-datepicker-header" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0">
+                <div class="modal-header border-0 align-self-center">
+                    <h2 class="modal-title fs-5 text-center" id="modal-datepicker-header">
+                        Выберите интервал
+                    </h2>
+                </div>
+                <div class="modal-body">
+                    <div class="input-daterange input-group" id="datepicker">
+                        <input type="text" class="input-group-sm form-control" id="date-from-input">
+                        <input type="text" class="input-group-sm form-control" id="date-to-input">
+                    </div>
+                </div>
+                <div class="modal-footer d-flex justify-content-center border-0">
+                    <button type="button" class="btn btn-success" data-bs-dismiss="modal"
+                            id="modal-button-datepicker-apply"
+                            disabled="disabled">Применить
+                    </button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal"
+                            id="modal-button-datepicker-close">Отмена
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

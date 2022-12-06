@@ -1,0 +1,96 @@
+@font-face {
+    font-family: Roboto;
+    src: url("../fonts/Roboto.ttf");
+}
+
+body {
+    font-family: Roboto, sans-serif;
+}
+
+.sidebar {
+    width: 218px;
+    font-size: 14px;
+}
+
+.content {
+    max-width: 1220px;
+}
+
+.nav-link svg path {
+    fill: black;
+}
+
+.nav-link span {
+    color: #052C65;
+}
+
+.nav-link.active svg path {
+    fill: white;
+}
+
+.nav-link.active span,
+.list-group-item.active div {
+    color: white;
+}
+
+.sidebar__bottom img {
+    cursor: pointer;
+}
+
+#buttonCategories svg {
+    transition: rotate .2s;
+    rotate: 90deg;
+}
+
+#buttonCategories.collapsed svg {
+    transition: rotate .2s;
+    rotate: 0deg;
+}
+
+.filter-buttons {
+    gap: 20px;
+}
+
+.buttons {
+    gap: 10px;
+}
+
+.login-form {
+    min-width: 400px;
+}
+
+.input-group span {
+    width: 10%;
+}
+
+#checkbox-remember-me span {
+    font-size: 12px;
+    cursor: pointer;
+    user-select: none;
+}
+
+input[type="checkbox"] {
+    cursor: pointer;
+}
+
+#link {
+    font-size: 12px;
+}
+
+.categories {
+    max-width: 1100px;
+    gap: 20px;
+}
+
+.categories div {
+    min-width: 352px;
+    min-height: 117px;
+}
+
+.data-table {
+    min-width: 1100px;
+}
+
+.data-table .row {
+    min-height: 50px;
+}
