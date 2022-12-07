@@ -3,17 +3,18 @@ import PathConfig from "../../config/pathConfig"
 import {CustomHttp} from "../services/custom-http";
 import {ResponseCategoryType} from "../types/response-category.type";
 import {ResponseDefaultType} from "../types/response-default.type";
+import {GetElementBy} from "../utils/getElementBy";
 
 export class Category {
-    categories: ResponseCategoryType[] | null = null;
-    page: string = '';
-    title: HTMLElement | null = null;
-    requestString: string = '';
-    categoriesBlock: HTMLElement | null = null;
-    addCategoryElement: HTMLElement | null = null;
-    modalButtonDelete: HTMLElement | null = null;
-    modalHeaderSpan: HTMLElement | null = null;
-    categoryType: string = '';
+    private categories: ResponseCategoryType[] | null = null;
+    private readonly page: string = '';
+    private title: HTMLElement | null = null;
+    private requestString: string = '';
+    private categoriesBlock: HTMLElement | null = null;
+    private addCategoryElement: HTMLElement | null = null;
+    private modalButtonDelete: HTMLElement | null = null;
+    private modalHeaderSpan: HTMLElement | null = null;
+    private categoryType: string = '';
 
     constructor(category: string) {
         this.page = category;
@@ -30,10 +31,10 @@ export class Category {
         }
 
         const that: Category = this;
-        this.title = document.getElementById('main-title');
-        this.categoriesBlock = document.getElementById('categories');
-        this.modalHeaderSpan = document.querySelector('.modal-header span');
-        this.modalButtonDelete = document.getElementById('modal-button-delete');
+        this.title = GetElementBy.id('main-title');
+        this.categoriesBlock = GetElementBy.id('categories');
+        this.modalHeaderSpan = GetElementBy.class('modal-header span');
+        this.modalButtonDelete = GetElementBy.id('modal-button-delete');
         if (this.modalButtonDelete) {
             this.modalButtonDelete.onclick = function () {
                 that.deleteCategory.call(that);
@@ -147,7 +148,7 @@ export class Category {
 
             this.categoriesBlock.appendChild(addCategoryElement);
 
-            this.addCategoryElement = document.getElementById('add-category');
+            this.addCategoryElement = GetElementBy.id('add-category');
         }
     }
 

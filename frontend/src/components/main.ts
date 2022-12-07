@@ -6,16 +6,17 @@ import {IntervalControls} from "./interval-controls";
 import Chart, {ChartConfiguration, ChartItem} from "chart.js/auto";
 import {ResponseOperationType} from "../types/response-operation.type";
 import {ResponseDefaultType} from "../types/response-default.type";
+import {GetElementBy} from "../utils/getElementBy";
 
 export class Main {
-    myChartIncomeElement: ChartItem | null = null;
-    myChartExpenseElement: ChartItem | null = null;
-    incomesChart: Chart | null = null;
-    expensesChart: Chart | null = null;
-    incomesConfig: ChartConfiguration = structuredClone(ChartConfig) as ChartConfiguration;
-    expensesConfig: ChartConfiguration = structuredClone(ChartConfig) as ChartConfiguration;
-    IntervalControls: IntervalControls | null = null;
-    periodTodayElement: HTMLElement | null = null;
+    private myChartIncomeElement: ChartItem | null = null;
+    private myChartExpenseElement: ChartItem | null = null;
+    private incomesChart: Chart | null = null;
+    private expensesChart: Chart | null = null;
+    private incomesConfig: ChartConfiguration = structuredClone(ChartConfig) as ChartConfiguration;
+    private expensesConfig: ChartConfiguration = structuredClone(ChartConfig) as ChartConfiguration;
+    private IntervalControls: IntervalControls | null = null;
+    private periodTodayElement: HTMLElement | null = null;
 
     constructor() {
         this.init();
@@ -29,10 +30,10 @@ export class Main {
             return;
         }
 
-        this.periodTodayElement = document.getElementById('period-today-button');
+        this.periodTodayElement = GetElementBy.id('period-today-button');
 
-        this.myChartIncomeElement = document.getElementById('chart-incomes') as ChartItem;
-        this.myChartExpenseElement = document.getElementById('chart-expenses') as ChartItem;
+        this.myChartIncomeElement = GetElementBy.id('chart-incomes') as ChartItem;
+        this.myChartExpenseElement = GetElementBy.id('chart-expenses') as ChartItem;
 
         this.IntervalControls = new IntervalControls(this.processOperation, this);
 
@@ -51,7 +52,9 @@ export class Main {
             Array.from(ChartConfig.data.datasets[0].backgroundColor).reverse();
         context.incomesConfig.data.datasets[0].label = 'Доходы';
         context.expensesConfig.data.datasets[0].label = 'Расходы';
+
         if (context.incomesChart) context.incomesChart.destroy();
+
         if (context.expensesChart) context.expensesChart.destroy();
 
         try {
@@ -60,10 +63,13 @@ export class Main {
             if ((result as ResponseDefaultType).error) {
                 throw new Error((result as ResponseDefaultType).message);
             }
+
             if (result && !(result as ResponseDefaultType).error) {
                 (result as ResponseOperationType[]).forEach((operation: ResponseOperationType) => {
                     let currentConfig: ChartConfiguration = ChartConfig as ChartConfiguration;
+
                     if (operation.type === 'income') currentConfig = context.incomesConfig;
+
                     if (operation.type === 'expense') currentConfig = context.expensesConfig;
 
                     if (currentConfig.data.labels && !currentConfig.data.labels.some((label: string | unknown) => (label === operation.category))) {

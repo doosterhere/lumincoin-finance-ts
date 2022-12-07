@@ -5,17 +5,17 @@ import {ResponseDefaultType} from "../types/response-default.type";
 import {ResponseOperationType} from "../types/response-operation.type";
 
 export class Intervals {
-    operationsDates: string[];
-    theFirstOperationDate: string;
-    today: IntervalsDateType;
-    week: IntervalsDateType;
-    month: IntervalsDateType;
-    year: IntervalsDateType;
-    lastMonth: number;
-    lastMonthYear: number;
-    oneWeekAgo: Date;
-    oneMonthAgo: Date;
-    oneYearAgo: Date;
+    private operationsDates: string[];
+    public theFirstOperationDate: string;
+    public today: IntervalsDateType;
+    public week: IntervalsDateType;
+    public month: IntervalsDateType;
+    public year: IntervalsDateType;
+    private readonly lastMonth: number;
+    private lastMonthYear: number;
+    private oneWeekAgo: Date;
+    private oneMonthAgo: Date;
+    private oneYearAgo: Date;
 
     constructor() {
         this.operationsDates = [];

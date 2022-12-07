@@ -1,21 +1,22 @@
 import {Intervals} from "../utils/intervals";
+import {GetElementBy} from "../utils/getElementBy";
 
 export class IntervalControls {
-    periodTodayElement: HTMLElement | null = null;
-    periodAllElement: HTMLElement | null = null;
-    periodIntervalElement: HTMLElement | null = null;
-    dateFromElement: HTMLElement | null = null;
-    dateFromInputElement: HTMLInputElement | null = null;
-    dateToElement: HTMLElement | null = null;
-    dateToInputElement: HTMLInputElement | null = null;
-    intervalApplyButton: HTMLElement | null = null;
-    intervalCloseButton: HTMLElement | null = null;
-    period: string | null = null;
-    buttonsBlock: HTMLElement | null = null;
-    datepickerElement: JQuery | null = null;
-    externalContext: object;
-    externalProcessFunction: Function;
-    Intervals: Intervals | null = null;
+    public periodTodayElement: HTMLElement | null = null;
+    private periodAllElement: HTMLElement | null = null;
+    private periodIntervalElement: HTMLElement | null = null;
+    private dateFromElement: HTMLElement | null = null;
+    private dateFromInputElement: HTMLInputElement | null = null;
+    private dateToElement: HTMLElement | null = null;
+    private dateToInputElement: HTMLInputElement | null = null;
+    private intervalApplyButton: HTMLElement | null = null;
+    private intervalCloseButton: HTMLElement | null = null;
+    public period: string | null = null;
+    private buttonsBlock: HTMLElement | null = null;
+    private readonly datepickerElement: JQuery | null = null;
+    private externalContext: object;
+    private externalProcessFunction: Function;
+    private Intervals: Intervals | null = null;
 
     constructor(externalProcessFunction: Function, externalContext: object) {
         this.datepickerElement = jQuery('#datepicker');
@@ -26,16 +27,16 @@ export class IntervalControls {
     }
 
     private init(): void {
-        this.periodTodayElement = document.getElementById('period-today-button');
-        this.periodAllElement = document.getElementById('period-all-button');
-        this.periodIntervalElement = document.getElementById('period-interval-button');
-        this.dateFromElement = document.getElementById('date-from');
-        this.dateFromInputElement = document.getElementById('date-from-input') as HTMLInputElement;
-        this.dateToElement = document.getElementById('date-to');
-        this.dateToInputElement = document.getElementById('date-to-input') as HTMLInputElement;
-        this.intervalApplyButton = document.getElementById('modal-button-datepicker-apply');
-        this.intervalCloseButton = document.getElementById('modal-button-datepicker-close');
-        this.buttonsBlock = document.querySelector('.filter-buttons');
+        this.periodTodayElement = GetElementBy.id('period-today-button');
+        this.periodAllElement = GetElementBy.id('period-all-button');
+        this.periodIntervalElement = GetElementBy.id('period-interval-button');
+        this.dateFromElement = GetElementBy.id('date-from');
+        this.dateFromInputElement = GetElementBy.id('date-from-input') as HTMLInputElement;
+        this.dateToElement = GetElementBy.id('date-to');
+        this.dateToInputElement = GetElementBy.id('date-to-input') as HTMLInputElement;
+        this.intervalApplyButton = GetElementBy.id('modal-button-datepicker-apply');
+        this.intervalCloseButton = GetElementBy.id('modal-button-datepicker-close');
+        this.buttonsBlock = GetElementBy.class('filter-buttons');
         this.Intervals = new Intervals();
 
         if (this.datepickerElement) {
@@ -93,6 +94,7 @@ export class IntervalControls {
                             that.dateFromElement && that.Intervals.theFirstOperationDate)
                             that.dateFromElement.innerText = that.Intervals.theFirstOperationDate;
                     }
+
                     that.externalProcessFunction(that.externalContext);
                 }
             }
@@ -107,6 +109,7 @@ export class IntervalControls {
                 if (that.datepickerElement) {
                     that.datepickerElement.datepicker('clearDates');
                 }
+
                 if (that.intervalApplyButton) {
                     that.intervalApplyButton.setAttribute('disabled', 'disabled');
                 }
@@ -130,12 +133,15 @@ export class IntervalControls {
                 if (that.dateFromElement && that.dateFromInputElement) {
                     that.dateFromElement.innerText = that.dateFromInputElement.value;
                 }
+
                 if (that.dateToElement && that.dateToInputElement) {
                     that.dateToElement.innerText = that.dateToInputElement.value;
                 }
+
                 if (that.datepickerElement) {
                     that.datepickerElement.datepicker('clearDates');
                 }
+
                 if (that.dateFromElement && that.dateToElement) {
                     const dateFrom: string = that.dateFromElement.innerText.split('.').reverse().join('-');
                     const dateTo: string = that.dateToElement.innerText.split('.').reverse().join('-');
@@ -149,10 +155,12 @@ export class IntervalControls {
 
     private setButtonPeriodPressedStyle(button: HTMLElement): void {
         const unStylizedButton: HTMLElement | null = document.querySelector('.btn-secondary');
+
         if (unStylizedButton) {
             unStylizedButton.classList.remove('btn-secondary');
             unStylizedButton.classList.add('btn-outline-secondary');
         }
+
         button.classList.remove('btn-outline-secondary');
         button.classList.add('btn-secondary');
     }
@@ -163,6 +171,7 @@ export class IntervalControls {
                 this.intervalApplyButton.setAttribute('disabled', 'disabled');
                 return;
             }
+
             this.intervalApplyButton.removeAttribute('disabled');
         }
     }

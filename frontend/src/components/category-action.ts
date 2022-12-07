@@ -5,18 +5,19 @@ import PathConfig from "../../config/pathConfig";
 import {QueryParamsType} from "../types/query-params.type";
 import {ResponseDefaultType} from "../types/response-default.type";
 import {ResponseCategoryType} from "../types/response-category.type";
+import {GetElementBy} from "../utils/getElementBy";
 
 export class CategoryAction {
-    category: string = '';
-    action: string = '';
-    titleElement: HTMLElement | null = null;
-    requestString: string = '';
-    actionElement: HTMLElement | null = null;
-    cancelElement: HTMLElement | null = null;
-    inputElement: HTMLInputElement | null = null;
-    routeParams: QueryParamsType = {};
-    backToLocation: string = '';
-    editableCategoryValue: string = '';
+    private readonly category: string = '';
+    private readonly action: string = '';
+    private titleElement: HTMLElement | null = null;
+    private requestString: string = '';
+    private actionElement: HTMLElement | null = null;
+    private cancelElement: HTMLElement | null = null;
+    private inputElement: HTMLInputElement | null = null;
+    private routeParams: QueryParamsType = {};
+    private backToLocation: string = '';
+    private editableCategoryValue: string = '';
 
     constructor(category: string, action: string) {
         this.category = category;
@@ -35,15 +36,15 @@ export class CategoryAction {
         }
 
         const that: CategoryAction = this;
-        this.titleElement = document.getElementById('main-title');
-        this.actionElement = document.getElementById('button-action');
-        this.cancelElement = document.getElementById('button-cancel');
+        this.titleElement = GetElementBy.id('main-title');
+        this.actionElement = GetElementBy.id('button-action');
+        this.cancelElement = GetElementBy.id('button-cancel');
         if (this.cancelElement) {
             this.cancelElement.onclick = function () {
                 location.href = that.backToLocation;
             }
         }
-        this.inputElement = document.getElementById('category-input') as HTMLInputElement;
+        this.inputElement = GetElementBy.id('category-input') as HTMLInputElement;
         this.inputElement.oninput = this.validateInput.bind(this);
 
         if (this.category === 'income') {

@@ -1,7 +1,7 @@
 import {Router} from "./router"
 
 class App {
-    router: Router;
+    private router: Router;
 
     constructor() {
         this.router = new Router();

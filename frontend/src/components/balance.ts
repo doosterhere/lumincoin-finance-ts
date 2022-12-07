@@ -7,15 +7,16 @@ import {ResponseDefaultType} from "../types/response-default.type";
 import {ResponseBalanceType} from "../types/response-balance.type";
 import {ResponseOperationType} from "../types/response-operation.type";
 import {ResponseCategoryType} from "../types/response-category.type";
+import {GetElementBy} from "../utils/getElementBy";
 
 export class Balance {
-    balanceElement: HTMLElement | null = null;
-    createIncomeElement: HTMLElement | null = null;
-    createExpenseElement: HTMLElement | null = null;
-    dataTableElement: HTMLElement | null = null;
-    modalButtonDelete: HTMLElement | null = null;
-    categoriesCount: { incomeCount: number, expenseCount: number } | undefined;
-    IntervalControls: IntervalControls | undefined;
+    private balanceElement: HTMLElement | null = null;
+    private createIncomeElement: HTMLElement | null = null;
+    private createExpenseElement: HTMLElement | null = null;
+    private dataTableElement: HTMLElement | null = null;
+    private modalButtonDelete: HTMLElement | null = null;
+    private readonly categoriesCount: { incomeCount: number, expenseCount: number } | undefined;
+    private IntervalControls: IntervalControls | undefined;
 
     constructor() {
         this.categoriesCount = {
@@ -34,11 +35,11 @@ export class Balance {
             return;
         }
 
-        this.createIncomeElement = document.getElementById('button-create-income');
-        this.createExpenseElement = document.getElementById('button-create-expense');
-        this.balanceElement = document.getElementById('user-balance');
-        this.dataTableElement = document.getElementById('data-table');
-        this.modalButtonDelete = document.getElementById('modal-button-delete-confirm');
+        this.createIncomeElement = GetElementBy.id('button-create-income');
+        this.createExpenseElement = GetElementBy.id('button-create-expense');
+        this.balanceElement = GetElementBy.id('user-balance');
+        this.dataTableElement = GetElementBy.id('data-table');
+        this.modalButtonDelete = GetElementBy.id('modal-button-delete-confirm');
 
         this.IntervalControls = new IntervalControls(this.processOperation, this);
 

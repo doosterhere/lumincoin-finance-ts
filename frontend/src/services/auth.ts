@@ -27,27 +27,30 @@ export class Auth {
                 const result = await response.json();
                 if (result && !result.error) {
                     this.setTokens(result.tokens.accessToken, result.tokens.refreshToken);
-                    this.removeReRefreshTokenCount();
+                    this.removeReRefreshTokenCounter();
                     console.log('The authorization token has been successfully updated.');
                     return true;
                 }
             }
-            const result = JSON.parse(await response.text());
-            if (response && response.status === 400 && result.message.toLowerCase() === 'invalid refresh token') {
-                const count: number | null = this.getReRefreshTokenCount();
 
-                if (count && count > 10) {
-                    console.log('Re-refreshing process has been stopped to avoid looping. Please, try again later...');
-                    this.removeReRefreshTokenCount();
-                    return false;
+            if (response && response.status === 400) {
+                const result = JSON.parse(await response.text());
+
+                if (result && result.error && result.message.toLowerCase() === 'invalid refresh token') {
+                    const attempt: number | null = this.getReRefreshTokenCounter();
+
+                    if (attempt && attempt > 10) {
+                        console.log('Re-refreshing process has been stopped to avoid looping. Please, try again later...');
+                        this.removeReRefreshTokenCounter();
+                        return false;
+                    }
+
+                    attempt ? this.setReRefreshTokenCounter(attempt + 1) : this.setReRefreshTokenCounter(1);
+                    const counter : number | null = this.getReRefreshTokenCounter();
+
+                    console.log(`Re-refresh authorization token is needed (attempt: ${counter})...`);
+                    return await this.processUnauthorizedResponse();
                 }
-
-                if (count) this.setReRefreshTokenCount(count + 1);
-
-                if (!count) this.setReRefreshTokenCount(1);
-
-                console.log(`Re-refresh authorization token is needed (attempt: ${count ? count : 0})...`);
-                return await this.processUnauthorizedResponse();
             }
         }
 
@@ -75,7 +78,7 @@ export class Auth {
                     this.removeTokens();
                     this.removeUserInfo();
                     this.removeAdditionalUserInfo();
-                    this.removeReRefreshTokenCount();
+                    this.removeReRefreshTokenCounter();
                     return true;
                 }
             }
@@ -121,17 +124,17 @@ export class Auth {
         localStorage.removeItem(this.userAdditionalInfoKey);
     }
 
-    private static setReRefreshTokenCount(count: number): void {
+    private static setReRefreshTokenCounter(count: number): void {
         localStorage.setItem(this.reRefreshTokenCountKey, JSON.stringify(count));
     }
 
-    private static getReRefreshTokenCount(): number | null {
+    private static getReRefreshTokenCounter(): number | null {
         const count: string | null = localStorage.getItem(this.reRefreshTokenCountKey);
         if (count) return Number(JSON.parse(count));
         return null;
     }
 
-    private static removeReRefreshTokenCount(): void {
+    private static removeReRefreshTokenCounter(): void {
         localStorage.removeItem(this.reRefreshTokenCountKey);
     }
 }

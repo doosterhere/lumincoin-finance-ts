@@ -9,28 +9,29 @@ import {ResponseOperationType} from "../types/response-operation.type";
 import {ResponseCategoryType} from "../types/response-category.type";
 import {BalanceActionFiledType} from "../types/balance-action-filed.type";
 import {ResponseCategoryCreateType} from "../types/response-category-create.type";
+import {GetElementBy} from "../utils/getElementBy";
 
 export class BalanceAction {
-    action: string = '';
-    titleElementSpanAction: HTMLElement | null = null;
-    titleElementSpanType: HTMLElement | null = null;
-    actionElement: HTMLElement | null = null;
-    cancelElement: HTMLElement | null = null;
-    requestString: string = '';
-    operationTypeElement: HTMLElement | null = null;
-    categoryElement: HTMLElement | null = null;
-    amountElement: HTMLElement | null = null;
-    dateElement: HTMLElement | null = null;
-    commentElement: HTMLElement | null = null;
-    incomeOptionElement: HTMLElement | null = null;
-    expenseOptionElement: HTMLElement | null = null;
-    balanceElement: HTMLElement | null = null;
-    routeParams: QueryParamsType = {};
-    method: string | null = null;
-    datepickerElement: JQuery | null = null;
-    operationData: ResponseOperationType | null = null;
-    categoriesData: ResponseCategoryType[] = [];
-    fields: BalanceActionFiledType[] = [];
+    private readonly action: string = '';
+    private titleElementSpanAction: HTMLElement | null = null;
+    private titleElementSpanType: HTMLElement | null = null;
+    private actionElement: HTMLElement | null = null;
+    private cancelElement: HTMLElement | null = null;
+    private requestString: string = '';
+    private operationTypeElement: HTMLElement | null = null;
+    private categoryElement: HTMLElement | null = null;
+    private amountElement: HTMLElement | null = null;
+    private dateElement: HTMLElement | null = null;
+    private commentElement: HTMLElement | null = null;
+    private incomeOptionElement: HTMLElement | null = null;
+    private expenseOptionElement: HTMLElement | null = null;
+    private balanceElement: HTMLElement | null = null;
+    private routeParams: QueryParamsType = {};
+    private method: string | null = null;
+    private readonly datepickerElement: JQuery | null = null;
+    private operationData: ResponseOperationType | null = null;
+    private categoriesData: ResponseCategoryType[] = [];
+    private fields: BalanceActionFiledType[] = [];
 
     constructor(action: string) {
         this.action = action;
@@ -79,19 +80,19 @@ export class BalanceAction {
             });
         }
 
-        this.titleElementSpanAction = document.querySelector('#main-title span:first-child');
-        this.titleElementSpanType = document.querySelector('#main-title span:last-child');
-        this.actionElement = document.getElementById('button-action');
-        this.cancelElement = document.getElementById('button-cancel');
-        this.actionElement = document.getElementById('button-action');
-        this.operationTypeElement = document.getElementById('type-input');
-        this.incomeOptionElement = document.querySelector('#type-input option:nth-child(2)');
-        this.expenseOptionElement = document.querySelector('#type-input option:last-child');
-        this.categoryElement = document.getElementById('category-input-list');
-        this.amountElement = document.getElementById('amount-input');
-        this.dateElement = document.getElementById('date-input');
-        this.commentElement = document.getElementById('comment-input');
-        this.balanceElement = document.getElementById('user-balance');
+        this.titleElementSpanAction = GetElementBy.id('main-title span:first-child');
+        this.titleElementSpanType = GetElementBy.id('main-title span:last-child');
+        this.actionElement = GetElementBy.id('button-action');
+        this.cancelElement = GetElementBy.id('button-cancel');
+        this.actionElement = GetElementBy.id('button-action');
+        this.operationTypeElement = GetElementBy.id('type-input');
+        this.incomeOptionElement = GetElementBy.id('type-input option:nth-child(2)');
+        this.expenseOptionElement = GetElementBy.id('type-input option:last-child');
+        this.categoryElement = GetElementBy.id('category-input-list');
+        this.amountElement = GetElementBy.id('amount-input');
+        this.dateElement = GetElementBy.id('date-input');
+        this.commentElement = GetElementBy.id('comment-input');
+        this.balanceElement = GetElementBy.id('user-balance');
 
         if (this.action === 'edit') {
             if (this.titleElementSpanAction) {
@@ -143,7 +144,7 @@ export class BalanceAction {
             if (this.categoryElement) this.categoryElement.onchange = this.validateFields.bind(this);
 
             this.fields.forEach(field => {
-                field.initialData = (document.getElementById(field.id) as HTMLInputElement).value;
+                field.initialData = (GetElementBy.id(field.id) as HTMLInputElement).value;
             });
 
             if (this.actionElement) this.actionElement.onclick = this.saveData.bind(this);
@@ -280,7 +281,7 @@ export class BalanceAction {
             if (this.action === 'edit') {
                 const thereAreNoChanges: boolean =
                     this.fields.every(field =>
-                        field.initialData === (document.getElementById(field.id) as HTMLInputElement).value);
+                        field.initialData === (GetElementBy.id(field.id) as HTMLInputElement).value);
 
                 if (thereAreNoChanges) {
                     this.actionElement.setAttribute('disabled', 'disabled');

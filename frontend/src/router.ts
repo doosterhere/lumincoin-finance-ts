@@ -7,6 +7,7 @@ import {CategoryAction} from "./components/category-action";
 import {SignIn} from "./components/sign-in";
 import {Sidebar} from "./components/sidebar";
 import {RouteType} from "./types/route.type";
+import {GetElementBy} from "./utils/getElementBy";
 
 export class Router {
     private readonly sidebarElement: HTMLElement | null;
@@ -14,8 +15,8 @@ export class Router {
     private routes: RouteType[];
 
     constructor() {
-        this.sidebarElement = document.getElementById('sidebar');
-        this.contentElement = document.getElementById('content');
+        this.sidebarElement = GetElementBy.id('sidebar');
+        this.contentElement = GetElementBy.id('content');
 
         this.routes = [
             {
@@ -135,7 +136,7 @@ export class Router {
             return;
         }
 
-        if (newRoute.sidebar && this.sidebarElement && !this.sidebarElement.querySelector('.sidebar')) {
+        if (newRoute.sidebar && this.sidebarElement && !GetElementBy.class('sidebar')) {
             const sidebarTemplate = 'templates/sidebar.html';
             if (this.sidebarElement) {
                 this.sidebarElement.innerHTML = await fetch(sidebarTemplate).then(response => response.text());

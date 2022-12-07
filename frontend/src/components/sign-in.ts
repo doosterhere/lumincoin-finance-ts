@@ -4,13 +4,14 @@ import {CustomHttp} from "../services/custom-http";
 import {SignInFiledType} from "../types/sign-in-filed.type";
 import {ResponseSignUpType} from "../types/response-sign-up.type";
 import {ResponseDefaultType} from "../types/response-default.type";
+import {GetElementBy} from "../utils/getElementBy";
 
 export class SignIn {
-    rememberElement: HTMLElement | null = null;
-    rememberElementText: HTMLElement | null = null;
-    processElement: HTMLElement | null = null;
-    page: string = '';
-    fields: SignInFiledType[] = [];
+    private rememberElement: HTMLElement | null = null;
+    private rememberElementText: HTMLElement | null = null;
+    private processElement: HTMLElement | null = null;
+    private readonly page: string = '';
+    private fields: SignInFiledType[] = [];
 
     constructor(page: string) {
         this.page = page;
@@ -64,7 +65,7 @@ export class SignIn {
         const that: SignIn = this;
 
         this.fields.forEach((field) => {
-            field.element = document.getElementById(field.id);
+            field.element = GetElementBy.id(field.id);
 
             if (field.element) {
                 field.element.onchange = function () {
@@ -73,7 +74,7 @@ export class SignIn {
             }
         });
 
-        this.processElement = document.getElementById('button-process');
+        this.processElement = GetElementBy.id('button-process');
         if (this.processElement) {
             this.processElement.onclick = function () {
                 that.processForm();
@@ -81,8 +82,8 @@ export class SignIn {
         }
 
         if (this.page === 'login') {
-            this.rememberElement = document.getElementById('checkbox');
-            this.rememberElementText = document.getElementById('checkbox-text');
+            this.rememberElement = GetElementBy.id('checkbox');
+            this.rememberElementText = GetElementBy.id('checkbox-text');
             if (this.rememberElementText) {
                 this.rememberElementText.onclick = function () {
                     if (that.rememberElement)
@@ -145,7 +146,7 @@ export class SignIn {
         const email: string = (this.fields.find(field => field.name === 'email')?.element as HTMLInputElement).value;
         const password: string = (this.fields.find(field => field.name === 'password')?.element as HTMLInputElement).value;
 
-        if (this.validateForm()) {
+        if (this. validateForm()) {
             if (this.page === 'signup') {
                 try {
                     const username: string[] =
