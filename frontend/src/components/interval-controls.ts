@@ -1,5 +1,4 @@
 import {Intervals} from "../utils/intervals";
-import {Auth} from "../services/auth";
 
 export class IntervalControls {
     periodTodayElement: HTMLElement | null = null;
@@ -108,30 +107,21 @@ export class IntervalControls {
                 if (that.datepickerElement) {
                     that.datepickerElement.datepicker('clearDates');
                 }
+                if (that.intervalApplyButton) {
+                    that.intervalApplyButton.setAttribute('disabled', 'disabled');
+                }
             }
         }
 
         if (this.dateFromInputElement) {
             this.dateFromInputElement.addEventListener('focusout', (event) => {
-                if (that.intervalApplyButton) {
-                    if (event.target && (event.target as HTMLInputElement).value === '') {
-                        that.intervalApplyButton.setAttribute('disabled', 'disabled');
-                        return;
-                    }
-                    that.intervalApplyButton.removeAttribute('disabled');
-                }
+                this.setIntervalApplyButtonAvailability(event.target as HTMLInputElement);
             });
         }
 
         if (this.dateToInputElement) {
             this.dateToInputElement.addEventListener('focusout', (event) => {
-                if (that.intervalApplyButton) {
-                    if (event.target && (event.target as HTMLInputElement).value === '') {
-                        that.intervalApplyButton.setAttribute('disabled', 'disabled');
-                        return;
-                    }
-                    that.intervalApplyButton.removeAttribute('disabled');
-                }
+                this.setIntervalApplyButtonAvailability(event.target as HTMLInputElement);
             });
         }
 
@@ -165,5 +155,15 @@ export class IntervalControls {
         }
         button.classList.remove('btn-outline-secondary');
         button.classList.add('btn-secondary');
+    }
+
+    private setIntervalApplyButtonAvailability(element: HTMLInputElement): void {
+        if (this.intervalApplyButton) {
+            if (element && (element as HTMLInputElement).value === '') {
+                this.intervalApplyButton.setAttribute('disabled', 'disabled');
+                return;
+            }
+            this.intervalApplyButton.removeAttribute('disabled');
+        }
     }
 }

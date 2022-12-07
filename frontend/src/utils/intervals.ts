@@ -53,7 +53,7 @@ export class Intervals {
         try {
             const result: ResponseDefaultType | ResponseOperationType[] =
                 await CustomHttp.request(`${PathConfig.host}/operations?period=all`);
-            if ((result as ResponseDefaultType).error) {
+            if (result && (result as ResponseDefaultType).error) {
                 throw new Error((result as ResponseDefaultType).message);
             }
             if (result && !(result as ResponseDefaultType).error && Object.keys(result).length) {

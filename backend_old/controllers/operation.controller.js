@@ -39,14 +39,12 @@ class OperationController {
         let newBalance = balance.balance;
         if (type === 'expense') {
             params.category_expense_id = category_id;
-            params.type = 'expense';
             newBalance -= params.amount;
             if (newBalance < 0) {
                 newBalance = 0;
             }
         } else if (type === 'income') {
             params.category_income_id = category_id;
-            params.type = 'income';
             newBalance += params.amount;
         }
 
@@ -88,13 +86,9 @@ class OperationController {
 
         const params = {amount, date, comment, user_id: req.body.user.id};
         if (type === 'expense') {
-            params.type = 'expense';
             params.category_expense_id = category_id;
-            params.category_income_id = null;
         } else if (type === 'income') {
-            params.type = 'income';
             params.category_income_id = category_id;
-            params.category_expense_id = null;
         }
         OperationModel.update({id: parseInt(id), user_id: req.body.user.id}, params);
 

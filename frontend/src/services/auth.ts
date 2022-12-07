@@ -4,14 +4,15 @@ import {UserInfoType} from "../types/user-info.type";
 import {UserAdditionalInfoType} from "../types/user-additional-info.type";
 
 export class Auth {
-    static readonly accessTokenKey: string = 'accessToken';
-    static readonly refreshTokenKey = 'refreshToken';
-    static readonly userInfoKey = 'userInfo';
-    static readonly userAdditionalInfoKey = 'userAdditionalInfo';
-    static readonly catListStateKey = 'catListState';
+    public static readonly accessTokenKey: string = 'accessToken';
+    private static readonly refreshTokenKey = 'refreshToken';
+    private static readonly userInfoKey = 'userInfo';
+    public static readonly userAdditionalInfoKey = 'userAdditionalInfo';
+    private static readonly reRefreshTokenCountKey = 'reRefreshCount';
 
-    static async processUnauthorizedResponse(): Promise<boolean> {
+    public static async processUnauthorizedResponse(): Promise<boolean | Function> {
         const refreshToken: string | null = localStorage.getItem(this.refreshTokenKey);
+
         if (refreshToken) {
             const response: Response = await fetch(`${PathConfig.host}/refresh`, {
                 method: 'POST',
@@ -26,11 +27,30 @@ export class Auth {
                 const result = await response.json();
                 if (result && !result.error) {
                     this.setTokens(result.tokens.accessToken, result.tokens.refreshToken);
+                    this.removeReRefreshTokenCount();
                     console.log('The authorization token has been successfully updated.');
                     return true;
                 }
             }
+            const result = JSON.parse(await response.text());
+            if (response && response.status === 400 && result.message.toLowerCase() === 'invalid refresh token') {
+                const count: number | null = this.getReRefreshTokenCount();
+
+                if (count && count > 10) {
+                    console.log('Re-refreshing process has been stopped to avoid looping. Please, try again later...');
+                    this.removeReRefreshTokenCount();
+                    return false;
+                }
+
+                if (count) this.setReRefreshTokenCount(count + 1);
+
+                if (!count) this.setReRefreshTokenCount(1);
+
+                console.log(`Re-refresh authorization token is needed (attempt: ${count ? count : 0})...`);
+                return await this.processUnauthorizedResponse();
+            }
         }
+
         this.removeTokens();
         location.href = '#/login';
         return false;
@@ -38,6 +58,7 @@ export class Auth {
 
     public static async logout(): Promise<boolean> {
         const refreshToken: string | null = localStorage.getItem(this.refreshTokenKey);
+
         if (refreshToken) {
             const response: Response = await fetch(`${PathConfig.host}/logout`, {
                 method: 'POST',
@@ -54,7 +75,7 @@ export class Auth {
                     this.removeTokens();
                     this.removeUserInfo();
                     this.removeAdditionalUserInfo();
-                    this.removeCatListState();
+                    this.removeReRefreshTokenCount();
                     return true;
                 }
             }
@@ -100,7 +121,17 @@ export class Auth {
         localStorage.removeItem(this.userAdditionalInfoKey);
     }
 
-    public static removeCatListState(): void {
-        localStorage.removeItem(this.catListStateKey);
+    private static setReRefreshTokenCount(count: number): void {
+        localStorage.setItem(this.reRefreshTokenCountKey, JSON.stringify(count));
+    }
+
+    private static getReRefreshTokenCount(): number | null {
+        const count: string | null = localStorage.getItem(this.reRefreshTokenCountKey);
+        if (count) return Number(JSON.parse(count));
+        return null;
+    }
+
+    private static removeReRefreshTokenCount(): void {
+        localStorage.removeItem(this.reRefreshTokenCountKey);
     }
 }

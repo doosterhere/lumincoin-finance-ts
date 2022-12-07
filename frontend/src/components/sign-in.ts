@@ -125,7 +125,7 @@ export class SignIn {
         this.validateForm();
     }
 
-    private validateForm(): boolean | void {
+    private validateForm(): boolean {
         if (this.processElement) {
             const isValid: boolean = this.fields.every(field => field.valid);
 
@@ -137,6 +137,8 @@ export class SignIn {
             this.processElement.classList.remove('disabled');
             return true;
         }
+
+        return false;
     }
 
     private async processForm(): Promise<void> {

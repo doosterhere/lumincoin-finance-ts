@@ -8,7 +8,7 @@ class OperationNormalizer {
 
         const data = {
             id: item.id,
-            type: item.type,
+            type: item.category_expense_id ? 'expense' : 'income',
             amount: item.amount,
             date: item.date,
             comment: item.comment,

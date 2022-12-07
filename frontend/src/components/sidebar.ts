@@ -31,6 +31,39 @@ export class Sidebar {
         regEx.exec(location.hash)?.forEach(token => {
             this.location = (Object.values(LocationType).find(location => location === token)) as string;
         });
+
+        switch (this.location) {
+            case LocationType.main: {
+                if (this.buttonMain) this.buttonMain.classList.add('active');
+                break;
+            }
+            case LocationType.incomes:
+            case LocationType.incomeEditing: {
+                this.buttonCategories?.dispatchEvent(new Event('click'));
+                this.buttonCategories?.classList.remove('rounded');
+                this.buttonCategories?.classList.add('rounded-0');
+                this.buttonCategories?.classList.add('rounded-top');
+                this.buttonCategories?.classList.add('active');
+                this.buttonIncomes?.parentElement?.classList.add('active');
+                break;
+            }
+            case LocationType.expenses:
+            case LocationType.expenseEditing: {
+                this.buttonCategories?.dispatchEvent(new Event('click'));
+                this.buttonCategories?.classList.remove('rounded');
+                this.buttonCategories?.classList.add('rounded-0');
+                this.buttonCategories?.classList.add('rounded-top');
+                this.buttonCategories?.classList.add('active');
+                this.buttonExpenses?.parentElement?.classList.add('active');
+                break;
+            }
+            case LocationType.balance:
+            case LocationType.balanceCreating: {
+                if (this.buttonBalance) this.buttonBalance.classList.add('active');
+                break;
+            }
+        }
+
         this.balanceElement = document.getElementById('user-balance');
         Balance.getBalance()
             .then(balance => {
@@ -41,8 +74,6 @@ export class Sidebar {
         if (userName && this.userNameElement) {
             this.userNameElement.innerText = `${userName.firstName} ${userName.lastName}`;
         }
-
-        if (this.buttonMain) this.buttonMain.classList.add('active');
 
         const that: Sidebar = this;
 

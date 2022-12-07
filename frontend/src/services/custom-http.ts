@@ -31,10 +31,12 @@ export class CustomHttp {
 
         if (response && ((response as Response).status < 200 || (response as Response).status > 299)) {
             if ((response as Response).status === 401) {
-                const result: boolean = await Auth.processUnauthorizedResponse();
-                if (result) {
+                const result: boolean | Function = await Auth.processUnauthorizedResponse();
+                if (result as boolean) {
                     return await this.request(url, method, body);
-                } else return null;
+                }
+
+                if (!result as boolean) return null;
             }
             throw new Error((response as ResponseDefaultType).message);
         }
